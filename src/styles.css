@@ -43,8 +43,14 @@ app-mrdividend, app-financials, app-splits, app-financials {
     padding: 20px 0;
 }
 app-overview {
+    display: grid;
     padding: 0 0 20px 0;
 }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.dataNotFound {
+    text-align: center;
+    margin: 20px 0 0 0;
+}
