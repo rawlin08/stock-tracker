@@ -37,4 +37,8 @@ export class StockAPIService {
   getTickerLastTrade(ticker: string, todayDate: string) {
     return this.http.get(`https://api.polygon.io/v2/aggs/ticker/${ticker}/range/1/second/${todayDate}/${todayDate}?adjusted=true&sort=desc&limit=1&apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t`)
   }
+
+  getOverallStockData(ticker: string) {
+    return this.http.get(`https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers/${ticker}?apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t`)
+  }
 }
