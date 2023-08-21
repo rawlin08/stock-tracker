@@ -4,33 +4,14 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
 @Component({
   selector: 'app-stock',
   template: `
-  <div class="ticker">
-    <h2>{{ stock.details.ticker }}</h2>
-    <p>{{ stock.details.name }}</p>
-  </div>
-  <div class="price">
-    <div class="currentPrice">
-      <h1>{{ price }}</h1> 
-      <p>Price Change From Yesterday</p>
-    </div>
-    <div class="hlv" *ngIf="">
-      <p>High/Low</p>
-      <p>Volume</p>
-      <p>Market Cap</p>
-    </div>
-    <div class="hlv">
-      <p>High</p>
-      <p>Low</p>
-      <p>Volume</p>
-    </div>
-  </div>
-
+  <app-price></app-price>
   <mat-tab-group fitInkBarToContent dynamicHeight class="remove-border-bottom">
-    <app-overview></app-overview>
     <mat-tab label="Overview"><app-overview></app-overview></mat-tab>
     <mat-tab label="News"><app-news></app-news></mat-tab>
     <mat-tab label="Company"><app-company></app-company></mat-tab>
   </mat-tab-group>
+
+  <app-past></app-past>
   `,
   styles: [``]
 })
@@ -63,7 +44,7 @@ export class StockComponent implements OnInit {
         this.price = "--"
         let today = new Date().toISOString().slice(0, 10)
         console.log(today)
-        this.stockapi.getTickerLastTrade(this.TESTSTOCK, '2023-08-17').subscribe((data) => {
+        this.stockapi.getTickerLastTrade(this.TESTSTOCK, '2023-08-18').subscribe((data) => {
           console.log(data);
           this.lastTrade = data;
           this.lastTrade = this.lastTrade.results[0].o
@@ -81,14 +62,15 @@ export class StockComponent implements OnInit {
   price:any;
   lastTrade:any;
   
-  TESTSTOCK: string = 'AAPL';
+  TESTSTOCK: string = 'SVOL';
 
   stock:any = {
     details: {},
     dividends: [],
     financials: [],
     splits: [],
-    news: []
+    news: [],
+    snapshot: {}
   };
   getStockInfo() {
     this.stockapi.getTickerDetails(this.TESTSTOCK).subscribe((data) => {
@@ -112,6 +94,10 @@ export class StockComponent implements OnInit {
       this.stock.news = this.stock.news.results;
     });
     console.log(this.stock);
+    this.stockapi.getOverallStockData(this.TESTSTOCK).subscribe((data) => {
+      this.stock.snapshot = data;
+      this.stock.snapshot = this.stock.snapshot.ticker;
+    });
   }
 
 }
