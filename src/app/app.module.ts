@@ -25,6 +25,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { PriceComponent } from './components/stock/price.component';
+import { StockSearchComponent } from './components/stock/search.component';
 
 @NgModule({
     declarations: [
@@ -42,7 +43,8 @@ import { PriceComponent } from './components/stock/price.component';
         PastComponent,
         PastSplitsComponent,
         PastFinancialsComponent,
-        PriceComponent
+        PriceComponent,
+        StockSearchComponent
     ],
     providers: [],
     bootstrap: [AppComponent],
@@ -53,7 +55,7 @@ import { PriceComponent } from './components/stock/price.component';
         BrowserAnimationsModule,
         MatTabsModule,
         MatSortModule,
-        MatTableModule
+        MatTableModule,
     ]
 })
 export class AppModule { }
