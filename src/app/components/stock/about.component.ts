@@ -6,7 +6,7 @@ import { StockComponent } from './stock.component';
   template: `
   <div class="container">
     <div *ngIf="stockComponent.stock.details.branding">
-      <img *ngIf="stockComponent.stock.details.branding.icon_url" id="logo" [src]="stockComponent.stock.details.branding.logo_url + '?apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t'" [alt]="stockComponent.stock.details.ticker + ' company logo'">
+      <img *ngIf="stockComponent.stock.details.branding.icon_url" id="logo" [src]="stockComponent.stock.details.branding.icon_url + '?apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t'" [alt]="stockComponent.stock.details.ticker + ' company logo'">
       <div class="imgback" *ngIf="stockComponent.stock.details.branding.icon_url == undefined || !stockComponent.stock.details.branding == undefined">{{ stockComponent.stock.details.name.slice(0, 1) }}HEY</div>
     </div>
     <div>
