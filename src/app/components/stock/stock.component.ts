@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { StockAPIService } from 'src/app/services/stock-api.service';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-stock',
@@ -15,15 +16,21 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
   styles: [``]
 })
 export class StockComponent implements OnInit {
-  constructor(public stockapi: StockAPIService, public route: ActivatedRoute, public router: Router){}
+  constructor(public stockapi: StockAPIService, public route: ActivatedRoute, public router: Router, public app: AppComponent){}
   ngOnInit() {
-
     this.route.paramMap.subscribe((params: ParamMap) => {
-      let uid: any = params.get('stock');
+      let uid:any = params.get('stock');
       this.getStockInfo(uid);
+
+      // ADD STOCK TO HISTORY
+      let history = JSON.parse(localStorage.getItem('history'));
+      history = history.filter((ticker:any) => ticker != uid);
+      history.push(uid);
+      localStorage.setItem('history', JSON.stringify(history));
+      
       let today = new Date().toISOString().slice(0, 10)
       console.log(today)
-      this.stockapi.getTickerLastTrade(uid, today).subscribe(
+      this.stockapi.getTickerLastTrade(uid, '2023-09-22').subscribe(
         res => {
           console.log(res);
           
@@ -53,7 +60,6 @@ export class StockComponent implements OnInit {
               this.price = n.toFixed(2);
             }
             else { // Message recieved was a connected, subscribed, or authorized completed message
-              
             }
           };
         },
