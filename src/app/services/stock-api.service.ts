@@ -41,4 +41,12 @@ export class StockAPIService {
   getOverallStockData(ticker: string) {
     return this.http.get(`https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers/${ticker}?apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t`)
   }
-}
+
+  searchSpecificTicker(ticker: string) {
+    ticker = ticker.toUpperCase();
+    return this.http.get(`https://api.polygon.io/v3/reference/tickers?ticker=${ticker}&market=stocks&active=true&limit=1&sort=ticker&apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t`)
+  }
+  searchNameTicker(ticker: string) {
+    return this.http.get(`https://api.polygon.io/v3/reference/tickers?market=stocks&search=${ticker}&active=true&limit=100&apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t`)
+  }
+ }
