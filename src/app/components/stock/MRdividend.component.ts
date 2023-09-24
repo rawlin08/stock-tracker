@@ -4,7 +4,7 @@ import { StockComponent } from './stock.component';
 @Component({
   selector: 'app-mrdividend',
   template: `
-  <h2>Dividends</h2>
+  <h2 routerLink="past">Dividends</h2>
   <div *ngIf="!stockComponent.stock.dividends[0]">
     <p>No Dividend Data Found</p>
   </div>
