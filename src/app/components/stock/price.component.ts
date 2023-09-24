@@ -5,10 +5,16 @@ import { AppComponent } from 'src/app/app.component';
 @Component({
   selector: 'app-price',
   template: `
-  <div class="ticker">
-    <h2>{{ stockComponent.stock.details.ticker }}</h2>
-    <p>{{ stockComponent.stock.details.name }}</p>
-  </div>
+  <header>
+    <div class="ticker">
+      <h2>{{ stockComponent.stock.details.ticker }}</h2>
+      <p>{{ stockComponent.stock.details.name }}</p>
+    </div>
+    <div>
+      <button routerLink="stock"><svg><use href="#searchIcon"></use></svg></button>
+      <button><svg><use href="#favoriteOutlineIcon"></use></svg></button>
+    </div>
+  </header>
   <div class="price" *ngIf="stockComponent.stock.snapshot.prevDay && stockComponent.price != '--'">
     <div *ngIf="stockComponent.price" class="currentPrice">
       <h1>{{ stockComponent.price }}</h1> 
@@ -45,6 +51,18 @@ import { AppComponent } from 'src/app/app.component';
   </div>
   `,
   styles: [`
+  header {
+    display: flex;
+    justify-content: space-between;
+  }
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+  button {
+    background-color: transparent;
+    border: none;
+  }
   .price {
     display: flex;
     justify-content: space-between;
