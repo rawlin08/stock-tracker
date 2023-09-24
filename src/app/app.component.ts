@@ -1,13 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'stock-tracker';
   constructor() {}
+  ngOnInit(): void {
+    let history = localStorage.getItem('history');
+    let histArray = [];
+    if (!history) {
+      localStorage.setItem('history', JSON.stringify(histArray))
+    }
+  }
 
   numToWord(input:any) {
     let num = input.toFixed();
