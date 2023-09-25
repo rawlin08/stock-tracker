@@ -28,7 +28,7 @@ export class StockAPIService {
     return this.http.get(`https://api.polygon.io/v3/reference/splits?ticker=${ticker}&apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t`);
   }
   getTickerFinancials(ticker: string) {
-    return this.http.get(`https://api.polygon.io/vX/reference/financials?ticker=${ticker}&sort=filing_date&apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t`);
+    return this.http.get(`https://api.polygon.io/vX/reference/financials?ticker=${ticker}&timeframe=quarterly&limit=20&apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t`);
   }
   getTickerNews(ticker: string) {
     return this.http.get(`https://api.polygon.io/v2/reference/news?ticker=${ticker}&apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t`)
