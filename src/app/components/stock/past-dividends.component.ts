@@ -1,17 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { StockComponent } from './stock.component';
+import { PastComponent } from './past.component';
 
 @Component({
   selector: 'app-past-dividends',
   template: `
-  <h3 class="dataNotFound" *ngIf="!this.stockComponent.stock.dividends[0]">No Dividend Data Found</h3>
-  <table *ngIf="this.stockComponent.stock.dividends[0]">
+  <h3 class="dataNotFound" *ngIf="!this.pastComponent.stock.dividends[0]">No Dividend Data Found</h3>
+  <table *ngIf="this.pastComponent.stock.dividends[0]">
     <tr>
       <th>Ex-Div Date</th>
       <th>Dividend Per Share</th>
       <th>Frequency</th>
     </tr>
-    <tr *ngFor="let element of this.stockComponent.stock.dividends">
+    <tr *ngFor="let element of this.pastComponent.stock.dividends">
       <td>{{ element.ex_dividend_date }}</td>
       <td>{{ round(element.cash_amount) }} {{ element.currency }}</td>
       <td>{{ getFrequency(element.frequency) }}</td>
@@ -31,7 +32,7 @@ import { StockComponent } from './stock.component';
   `]
 })
 export class PastDividendsComponent {
-  constructor(public stockComponent: StockComponent) {}
+  constructor(public pastComponent: PastComponent) {}
 
   getFrequency(frequency:any) {
     let freq;
