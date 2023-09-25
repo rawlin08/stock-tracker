@@ -18,6 +18,7 @@ import { NewsComponent } from './components/stock/news.component';
 import { PastComponent } from './components/stock/past.component';
 import { PastSplitsComponent } from './components/stock/past-splits.component';
 import { PastFinancialsComponent } from './components/stock/past-financials.component';
+import { CandleChartComponent } from './components/stock/candle-chart.component';
 
 // Angular Material
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -26,6 +27,11 @@ import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { PriceComponent } from './components/stock/price.component';
 import { StockSearchComponent } from './components/stock/search.component';
+import { IncomeStatementComponent } from './components/stock/income-statement.component';
+
+// Outside Components
+import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
+import { PastIncomeStatementComponent } from './components/stock/past-income-statement.component';
 
 @NgModule({
     declarations: [
@@ -44,9 +50,14 @@ import { StockSearchComponent } from './components/stock/search.component';
         PastSplitsComponent,
         PastFinancialsComponent,
         PriceComponent,
-        StockSearchComponent
+        StockSearchComponent,
+        CandleChartComponent,
+        IncomeStatementComponent,
+        PastIncomeStatementComponent
     ],
-    providers: [],
+    providers: [
+        StockComponent
+    ],
     bootstrap: [AppComponent],
     imports: [
         BrowserModule,
@@ -56,6 +67,7 @@ import { StockSearchComponent } from './components/stock/search.component';
         MatTabsModule,
         MatSortModule,
         MatTableModule,
+        CanvasJSAngularChartsModule
     ]
 })
 export class AppModule { }
