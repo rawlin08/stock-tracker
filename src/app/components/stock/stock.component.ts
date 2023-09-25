@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { StockAPIService } from 'src/app/services/stock-api.service';
 import { AppComponent } from 'src/app/app.component';
@@ -15,11 +15,12 @@ import { AppComponent } from 'src/app/app.component';
   `,
   styles: [``]
 })
-export class StockComponent implements OnInit {
+export class StockComponent implements OnInit, OnDestroy {
   constructor(public stockapi: StockAPIService, public route: ActivatedRoute, public router: Router, public app: AppComponent){}
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) => {
       let uid:any = params.get('stock');
+      uid = uid.toUpperCase();
       this.getStockInfo(uid);
 
       // ADD STOCK TO HISTORY
@@ -30,7 +31,7 @@ export class StockComponent implements OnInit {
       
       let today = new Date().toISOString().slice(0, 10)
       console.log(today)
-      this.stockapi.getTickerLastTrade(uid, '2023-09-22').subscribe(
+      this.stockapi.getTickerLastTrade(uid, '2023-09-25').subscribe(
         res => {
           console.log(res);
           
@@ -69,6 +70,10 @@ export class StockComponent implements OnInit {
       );
     });
   }
+  ngOnDestroy() {
+    this.stocksWS.close();
+  }
+
   APIKEY:any = 'TKVSXdx635Dera7_JxMwbX3fQBc1Q77t';
   stocksWS:any = {}
   price:any;
