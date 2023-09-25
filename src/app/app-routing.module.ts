@@ -10,7 +10,8 @@ import { PastComponent } from './components/stock/past.component';
 const routes: Routes = [
   { path: 'stock', title: 'Stock Search', component: StockSearchComponent },
   { path: 'stock/:stock', component: StockComponent },
-  { path: '**', redirectTo: 'stock', pathMatch: 'full'}
+  { path: 'stock/:stock/past', component: PastComponent },
+  
 ];
 
 @NgModule({
