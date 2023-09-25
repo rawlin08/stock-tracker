@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { StockComponent } from './stock.component';
 import { AppComponent } from 'src/app/app.component';
 
@@ -7,18 +7,18 @@ import { AppComponent } from 'src/app/app.component';
   template: `
   <header>
     <div class="ticker">
-      <h2>{{ stockComponent.stock.details.ticker }}</h2>
+      <h2>{{ stockComponent.stock.details.ticker ? stockComponent.stock.details.ticker : '--' }}</h2>
       <p>{{ stockComponent.stock.details.name }}</p>
     </div>
     <div>
-      <button routerLink="stock"><svg><use href="#searchIcon"></use></svg></button>
+      <button routerLink="/stock"><svg><use href="#searchIcon"></use></svg></button>
       <button><svg><use href="#favoriteOutlineIcon"></use></svg></button>
     </div>
   </header>
-  <div class="price" *ngIf="stockComponent.stock.snapshot.prevDay && stockComponent.price != '--'">
-    <div *ngIf="stockComponent.price" class="currentPrice">
-      <h1>{{ stockComponent.price }}</h1> 
-      <p>{{ stockComponent.price > stockComponent.stock.snapshot.prevDay.c ? '+' : '' }}{{ round(stockComponent.price - stockComponent.stock.snapshot.prevDay.c) }} ({{ stockComponent.price > stockComponent.stock.snapshot.prevDay.c ? '+' : '-' }}{{ getPriceChange(stockComponent.stock.snapshot.prevDay.c, stockComponent.price) }}%)</p>
+  <div class="price">
+    <div class="currentPrice">
+      <h1>{{ stockComponent.price != undefined ? stockComponent.price : '--' }}</h1> 
+      <p *ngIf="stockComponent.price">{{ stockComponent.price > stockComponent.stock.snapshot.prevDay.c ? '+' : '' }}{{ round(stockComponent.price - stockComponent.stock.snapshot.prevDay.c) }} ({{ stockComponent.price > stockComponent.stock.snapshot.prevDay.c ? '+' : '-' }}{{ getPriceChange(stockComponent.stock.snapshot.prevDay.c, stockComponent.price) }}%)</p>
     </div>
     <div class="hlv" *ngIf="stockComponent.stock.details.market_cap && stockComponent.stock.snapshot.day">
       <div>
@@ -76,9 +76,9 @@ import { AppComponent } from 'src/app/app.component';
   }
   `]
 })
-export class PriceComponent {
+export class PriceComponent implements OnInit {
   constructor(public stockComponent: StockComponent, public app: AppComponent) {}
-
+  ngOnInit(): void {}
   getPriceChange(prevClose: number, currPrice: number) {
     let percent:any;
     if (currPrice > prevClose) {
@@ -96,8 +96,8 @@ export class PriceComponent {
     return percent
   }
   round(num: any) {
-    let split = num.toString().split('.');
-    if (split[1].length == 1 || split[1].length == 2 || split[1].length == 3) {
+    let split = num.toString().split('.');    
+    if (!split[1] || split[1].length == 1 || split[1].length == 2 || split[1].length == 3) {
       return num
     }
     else {
@@ -106,4 +106,5 @@ export class PriceComponent {
       return a
     }
   }
+
 }
