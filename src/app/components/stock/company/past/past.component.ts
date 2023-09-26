@@ -25,21 +25,13 @@ export class PastComponent implements OnInit {
   }
 
   stock:any = {
-    details: {},
     dividends: [],
-    financials: [],
     splits: [],
-    news: [],
-    snapshot: {}
   };
 
   uid:any;
 
   getStockInfo(stock:any) {
-    this.stockapi.getTickerDetails(stock).subscribe((data) => {
-      this.stock.details = data;
-      this.stock.details = this.stock.details.results;
-    });
     this.stockapi.getTickerDividends(stock).subscribe((data) => {
       this.stock.dividends = data;
       this.stock.dividends = this.stock.dividends.results;
@@ -47,19 +39,6 @@ export class PastComponent implements OnInit {
     this.stockapi.getTickerSplits(stock).subscribe((data) => {
       this.stock.splits = data;
       this.stock.splits = this.stock.splits.results;
-    });
-    this.stockapi.getTickerFinancials(stock).subscribe((data) => {
-      this.stock.financials = data;
-      this.stock.financials = this.stock.financials.results;
-    });
-    this.stockapi.getTickerNews(stock).subscribe((data) => {
-      this.stock.news = data;
-      this.stock.news = this.stock.news.results;
-    });
-    console.log(this.stock);
-    this.stockapi.getOverallStockData(stock).subscribe((data) => {
-      this.stock.snapshot = data;
-      this.stock.snapshot = this.stock.snapshot.ticker;
     });
   }
 }
