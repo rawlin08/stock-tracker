@@ -18,14 +18,13 @@ import { StockComponent } from '../stock.component';
         <p>{{ stockComponent.stock.dividends[0].currency }} {{ round(stockComponent.stock.dividends[0].cash_amount) }}</p>
         <p>{{ stockComponent.stock.dividends[0].ex_dividend_date }}</p>
         <p>{{ stockComponent.stock.dividends[0].pay_date }}</p>
-        <p>{{ getDivYield(stockComponent.price, stockComponent.stock.dividends[0].cash_amount) }}</p>
+        <p>{{ getDivYield(stockComponent.price, stockComponent.stock.dividends[0].cash_amount) }}%</p>
         <p>{{ getFrequency(stockComponent.stock.dividends[0].frequency) }}</p>
       </div>
     </div>
     <div>
       <h3>To Get $100/month from {{ stockComponent.stock.details.ticker }}</h3>
       <p>Based on the current price and the most recent dividend, you would need {{ getDivFromMR().money }} invested or about {{ getDivFromMR().shares }} shares</p>
-      <p>Based on the current price and the smallest dividend recorded, you would need {{ getDivFromSmallest().money }} invested or about {{ getDivFromSmallest().shares }} shares</p>
     </div>
   </div>
 
@@ -63,8 +62,9 @@ export class MRDividendComponent implements OnInit {
     return freq;
   }
   getDivYield(sp: number, div: number) {  
-    let dy = div / sp;
+    let dy:any = div / sp;
     dy = dy * 100;
+    dy = dy.toFixed(2)
     return dy
   }
   
