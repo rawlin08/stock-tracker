@@ -7,18 +7,20 @@ import { AppComponent } from 'src/app/app.component';
   template: `
   <header>
     <div class="ticker">
-      <h2>{{ stockComponent.stock.details.ticker ? stockComponent.stock.details.ticker : '--' }}</h2>
+      <div>
+        <h2>{{ stockComponent.stock.details.ticker ? stockComponent.stock.details.ticker : '--' }}</h2>
+        <div>
+          <button routerLink="/stock"><svg><use href="#searchIcon"></use></svg></button>
+          <button><svg><use href="#favoriteOutlineIcon"></use></svg></button>
+        </div>
+      </div>
       <p>{{ stockComponent.stock.details.name }}</p>
-    </div>
-    <div>
-      <button routerLink="/stock"><svg><use href="#searchIcon"></use></svg></button>
-      <button><svg><use href="#favoriteOutlineIcon"></use></svg></button>
     </div>
   </header>
   <div class="price">
     <div class="currentPrice">
       <h1>{{ stockComponent.price != undefined ? stockComponent.price : '--' }}</h1> 
-      <p *ngIf="stockComponent.price">{{ stockComponent.price > stockComponent.stock.snapshot.prevDay.c ? '+' : '' }}{{ round(stockComponent.price - stockComponent.stock.snapshot.prevDay.c) }} ({{ stockComponent.price > stockComponent.stock.snapshot.prevDay.c ? '+' : '-' }}{{ getPriceChange(stockComponent.stock.snapshot.prevDay.c, stockComponent.price) }}%)</p>
+      <p *ngIf="stockComponent.price && stockComponent.stock.snapshot.prevDay">{{ stockComponent.price > stockComponent.stock.snapshot.prevDay.c ? '+' : '' }}{{ round(stockComponent.price - stockComponent.stock.snapshot.prevDay.c) }} ({{ stockComponent.price > stockComponent.stock.snapshot.prevDay.c ? '+' : '-' }}{{ getPriceChange(stockComponent.stock.snapshot.prevDay.c, stockComponent.price) }}%)</p>
     </div>
     <div class="hlv" *ngIf="stockComponent.stock.details.market_cap && stockComponent.stock.snapshot.day">
       <div>
@@ -54,6 +56,14 @@ import { AppComponent } from 'src/app/app.component';
   header {
     display: flex;
     justify-content: space-between;
+  }
+  .ticker {
+    width: 100%;
+  }
+  .ticker > div:first-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   svg {
     width: 24px;
@@ -96,8 +106,11 @@ export class PriceComponent implements OnInit {
     return percent
   }
   round(num: any) {
-    let split = num.toString().split('.');    
-    if (!split[1] || split[1].length == 1 || split[1].length == 2 || split[1].length == 3) {
+    let split = num.toString().split('.');   
+    if (!split[1]) {
+      return `${num}.00`
+    } 
+    else if (split[1].length == 1 || split[1].length == 2 || split[1].length == 3) {
       return num
     }
     else {
