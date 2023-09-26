@@ -17,18 +17,32 @@ export class AppComponent implements OnInit {
   }
 
   numToWord(input:any) {
-    let num = input.toFixed();
-    if (this.findTerrain(7, num)) {
-      return this.returnNum(7, "M", num);
+    let num:any = Number(input);
+    let num2:any = 0;
+
+    if (num < 0) { // if number is negative
+      num2 = num.toString();
+      num2 = num2.slice(1);
+      num2 = Number(num2);
     }
-    else if (this.findTerrain(10, num)) {
-      return this.returnNum(10, "B", num);
+    // If the number is less than 7 digits, just put in commas
+    if (num.toFixed().length < 7) {
+      return num.toLocaleString();
     }
-    else if (this.findTerrain(13, num)) {
-      return this.returnNum(13, "T", num);
-    }
-    else if (this.findTerrain(16, num)) {
-      return this.returnNum(16, "Q", num);
+    else {
+      num = num.toFixed();
+      if (this.findTerrain(7, num)) {
+        return this.returnNum(7, "M", num);
+      }
+      else if (this.findTerrain(10, num)) {
+        return this.returnNum(10, "B", num);
+      }
+      else if (this.findTerrain(13, num)) {
+        return this.returnNum(13, "T", num);
+      }
+      else if (this.findTerrain(16, num)) {
+        return this.returnNum(16, "Q", num);
+      }
     }
   }
   
