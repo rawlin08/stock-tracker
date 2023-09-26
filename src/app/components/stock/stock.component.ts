@@ -31,7 +31,7 @@ export class StockComponent implements OnInit, OnDestroy {
       
       let today = new Date().toISOString().slice(0, 10)
       console.log(today)
-      this.stockapi.getTickerLastTrade(uid, '2023-09-25').subscribe(
+      this.stockapi.getTickerLastTrade(uid, '2023-09-26').subscribe(
         res => {
           console.log(res);
           
