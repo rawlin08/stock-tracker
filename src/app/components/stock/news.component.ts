@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { StockComponent } from './stock.component';
+import * as dayjs from 'dayjs';
+import * as relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 @Component({
   selector: 'app-news',
@@ -10,7 +13,13 @@ import { StockComponent } from './stock.component';
       <div>
         <a [href]="article.article_url"><h4>{{ article.title }}</h4></a>
         <p>{{ article.description }}</p>
-        <p>{{ article.author }} - {{ article.published_utc }}</p>
+        <div class="publisher">
+          <img [src]="article.publisher.favicon_url" alt="">
+          <p>{{ article.publisher.name }} - {{ getDate(article.published_utc) }}</p>
+        </div>
+        <div class="tickers">
+          <button [routerLink]="'/stock/' + ticker" *ngFor="let ticker of article.tickers">{{ ticker }}</button>
+        </div>
       </div>
       <div class="articleImage">
         <img [src]="article.image_url" [alt]="">
@@ -26,7 +35,6 @@ import { StockComponent } from './stock.component';
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    max-height: 200px;
   }
   .articleImage > img {
     width: 100px;
@@ -36,7 +44,6 @@ import { StockComponent } from './stock.component';
   p:nth-child(2) {
     margin: 10px 0;
     font-size: 0.85em;
-    max-height: 100px;
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -49,13 +56,46 @@ import { StockComponent } from './stock.component';
     color: gray;
   }
   h4 {
-    font-size: 1em;
+    font-size: 15px;
+    line-height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
   }
   a {
     text-decoration: none;
+  }
+  .publisher {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .publisher > img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
+  .tickers {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fit, 50px)
+  }
+  .tickers > button {
+    border: none;
+    background-color: transparent;
   }
   `]
 })
 export class NewsComponent {
   constructor(public stockComponent: StockComponent) {}
+  
+  getDate(date:any) {
+    return dayjs(date).fromNow();
+  }
+
+  trackByFn(index:any, item:any) {
+    return item.uniqueValue
+  }
 }
