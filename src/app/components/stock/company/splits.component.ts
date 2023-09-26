@@ -1,13 +1,10 @@
 import { Component } from '@angular/core';
-import { StockComponent } from './stock.component';
+import { StockComponent } from '../stock.component';
 
 @Component({
   selector: 'app-splits',
   template: `
   <h2>Splits</h2>
-  <div *ngIf="!stockComponent.stock.splits[0]">
-    <p>No Split Data Found</p>
-  </div>
   <div class="MRSplit" *ngIf="stockComponent.stock.splits[0]">
     <div>
       <p>Split Ratio</p>

@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { StockComponent } from './stock.component';
+import { StockComponent } from '../stock.component';
 
 @Component({
   selector: 'app-mrdividend',
   template: `
   <h2 routerLink="past">Dividends</h2>
-  <div *ngIf="!stockComponent.stock.dividends[0]">
-    <p>No Dividend Data Found</p>
-  </div>
   <div *ngIf="stockComponent.stock.dividends[0]">
     <div class="MRDiv">
       <div>

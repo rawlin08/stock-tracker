@@ -1,14 +1,11 @@
 import { Component } from '@angular/core';
-import { StockComponent } from './stock.component';
+import { StockComponent } from '../stock.component';
 import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-financials',
   template: `
   <h2>Financials</h2>
-  <div *ngIf="!stockComponent.stock.financials[0]">
-    <p>No Financial Data Found</p>
-  </div>
   <div class="MRSplit" *ngIf="stockComponent.stock.financials[0]">
     <div class="income">
       <h2>Income Statement</h2>
@@ -22,9 +19,9 @@ import { AppComponent } from 'src/app/app.component';
         <div class="scroll">
           <div class="card" *ngFor="let year of stockComponent.stock.financials">
             <h3>{{ year.fiscal_year }} {{ year.fiscal_period }}</h3>
-            <p>{{ app.numToWord(year.financials.income_statement.revenues.value) }}</p>
-            <p>{{ app.numToWord(year.financials.income_statement.net_income_loss.value) }}</p>
-            <p>{{ app.numToWord(year.financials.income_statement.operating_income_loss.value) }}</p>
+            <p>{{ year.financials.income_statement ? year.financials.income_statement.revenues ? app.numToWord(year.financials.income_statement.revenues.value) : '0.00' : '0.00' }}</p>
+            <p>{{ year.financials.income_statement ? year.financials.income_statement.net_income_loss ? app.numToWord(year.financials.income_statement.net_income_loss.value) : '0.00' : '0.00' }}</p>
+            <p>{{ year.financials.income_statement ? year.financials.income_statement.operating_income_loss ? app.numToWord(year.financials.income_statement.operating_income_loss.value) : '0.00' : '0.00' }}</p>
           </div>
         </div>
       </div>
@@ -41,9 +38,9 @@ import { AppComponent } from 'src/app/app.component';
         <div class="scroll">
           <div class="card" *ngFor="let year of stockComponent.stock.financials">
             <h3>{{ year.fiscal_year }} {{ year.fiscal_period }}</h3>
-            <p>{{ app.numToWord(year.financials.balance_sheet.assets.value) }}</p>
-            <p>{{ app.numToWord(year.financials.balance_sheet.liabilities.value) }}</p>
-            <p>{{ debtToAsset(year.financials.balance_sheet.liabilities.value, year.financials.balance_sheet.assets.value) }}%</p>
+            <p>{{ year.financials.balance_sheet ? year.financials.balance_sheet.assets ? app.numToWord(year.financials.balance_sheet.assets.value) : '0.00' : '0.00' }}</p>
+            <p>{{ year.financials.balance_sheet ? year.financials.balance_sheet.liabilities ? app.numToWord(year.financials.balance_sheet.liabilities.value) : '0.00' : '0.00' }}</p>
+            <p>{{ year.financials.balance_sheet ? year.financials.balance_sheet.assets && year.financials.balance_sheet.liabilities ? debtToAsset(year.financials.balance_sheet.liabilities.value, year.financials.balance_sheet.assets.value) : '0' : '0' }}%</p>
           </div>
         </div>
       </div>
@@ -60,9 +57,9 @@ import { AppComponent } from 'src/app/app.component';
         <div class="scroll">
           <div class="card" *ngFor="let year of stockComponent.stock.financials">
             <h3>{{ year.fiscal_year }} {{ year.fiscal_period }}</h3>
-            <p>{{ app.numToWord(year.financials.cash_flow_statement.net_cash_flow_from_operating_activities.value) }}</p>
-            <p>{{ app.numToWord(year.financials.cash_flow_statement.net_cash_flow_from_investing_activities.value) }}</p>
-            <p>{{ app.numToWord(year.financials.cash_flow_statement.net_cash_flow_from_financing_activities.value) }}</p>
+            <p>{{ year.financials.cash_flow_statement ? year.financials.cash_flow_statement.net_cash_flow_from_operating_activities ? app.numToWord(year.financials.cash_flow_statement.net_cash_flow_from_operating_activities.value) : '0.00' : '0.00' }}</p>
+            <p>{{ year.financials.cash_flow_statement ? year.financials.cash_flow_statement.net_cash_flow_from_investing_activities ? app.numToWord(year.financials.cash_flow_statement.net_cash_flow_from_investing_activities.value) : '0.00' : '0.00' }}</p>
+            <p>{{ year.financials.cash_flow_statement ? year.financials.cash_flow_statement.net_cash_flow_from_financing_activities ? app.numToWord(year.financials.cash_flow_statement.net_cash_flow_from_financing_activities.value) : '0.00' : '0.00' }}</p>
           </div>
         </div>
       </div>

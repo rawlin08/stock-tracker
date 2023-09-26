@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StockComponent } from './stock.component';
+import { StockComponent } from '../stock.component';
 
 @Component({
   selector: 'app-about',

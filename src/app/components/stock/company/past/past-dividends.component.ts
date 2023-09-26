@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StockComponent } from './stock.component';
+import { StockComponent } from '../../stock.component';
 import { PastComponent } from './past.component';
 
 @Component({
@@ -41,10 +41,13 @@ export class PastDividendsComponent {
         freq = 'Monthly'
         break
       case 6:
-        freq = 'Bi-Yearly'
+        freq = 'Bi-Monthly'
         break
       case 4:
         freq = 'Quarterly'
+        break
+      case 2:
+        freq = 'Bi-Yearly'
         break
       case 1:
         freq = 'Yearly'
