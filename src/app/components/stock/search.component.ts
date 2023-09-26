@@ -7,21 +7,24 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
   <form>
     <input autofocus #searchForm (input)="search(searchForm.value)" type="search" name="search" id="search" placeholder="Search by Ticker or Name">
   </form>
-  <div *ngIf="this.tickerHistory != 0 && this.results.length == 0" class="history">
+  <div *ngIf="this.tickerHistory != 0 && this.results.length == 0 && searchForm.value == ''" class="history">
     <div>
       <h2>History</h2>
       <button (click)="this.clearHistory()"><svg><use href="#trashIcon"></use></svg></button>
     </div>
     <div *ngFor="let ticker of tickerHistory" class="card" [routerLink]="ticker.ticker">
-      <p>{{ ticker.name }}</p>
       <p>{{ ticker.ticker }}</p>
+      <p>{{ ticker.name }}</p>
     </div>
   </div>
   <div class="results">
     <div *ngFor="let ticker of results" class="card" [routerLink]="ticker.ticker">
-      <p>{{ ticker.name }}</p>
       <p>{{ ticker.ticker }}</p>
+      <p>{{ ticker.name }}</p>
     </div>
+  </div>
+  <div class="nonresults" *ngIf="this.results.length == 0 && searchForm.value != ''">
+    <p>No Results for {{ searchForm.value }}</p>
   </div>
   `,
   styles: [`
