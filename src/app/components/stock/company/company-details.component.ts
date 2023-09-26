@@ -5,10 +5,65 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
 @Component({
   selector: 'app-company-details',
   template: `
-  
+  <div>
+    <button [routerLink]="'/stock/' + this.uid">Back to Stock</button>
+    <div class="stock">
+      <div *ngIf="this.stock.details.branding">
+        <img *ngIf="this.stock.details.branding.icon_url" id="logo" [src]="this.stock.details.branding.icon_url + '?apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t'" [alt]="this.stock.details.ticker + ' company logo'">
+        <div class="imgback" *ngIf="this.stock.details.branding.icon_url == undefined || !this.stock.details.branding == undefined">{{ this.stock.details.name.slice(0, 1) }}HEY</div>
+      </div>
+      <h3>{{ this.stock.details.name }}</h3>
+    </div>
+    <ng-template #loading>
+      <div class="loading">
+        <div class="loader"></div>
+      </div>
+    </ng-template>
+    <div class="details" *ngIf="this.stock.details.active; else loading">
+      <div class="card">
+        <p>Symbol</p>
+        <p>{{ this.stock.details.ticker }}</p>
+      </div>
+      <div class="card">
+        <p>List Date</p>
+        <p>{{ getDate(this.stock.details.list_date.toLocaleString().slice(0, 9)) }}</p>
+      </div>
+      <div class="card">
+        <p>Exchange</p>
+        <p>{{ this.stock.details.primary_exchange }}</p>
+      </div>
+      <div class="card">
+        <p>Employees</p>
+        <p>{{ this.stock.details.total_employees.toLocaleString() }}</p>
+      </div>
+      <div class="card">
+        <p>Profile</p>
+        <p>{{ this.stock.details.description }}</p>
+      </div>
+    </div>
+  </div>
   `,
   styles: [`
-  
+  #logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #000;
+  }
+  .stock {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .card {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    padding: 10px 0;
+    border-top: 1px solid #000;
+  }
+  .card:first-child {
+    border-top: none;
+  }
   `]
 })
 export class CompanyDetailsComponent implements OnInit {
@@ -23,11 +78,6 @@ export class CompanyDetailsComponent implements OnInit {
 
   stock:any = {
     details: {},
-    dividends: [],
-    financials: [],
-    splits: [],
-    news: [],
-    snapshot: {}
   };
 
   uid:any;
@@ -37,26 +87,14 @@ export class CompanyDetailsComponent implements OnInit {
       this.stock.details = data;
       this.stock.details = this.stock.details.results;
     });
-    this.stockapi.getTickerDividends(stock).subscribe((data) => {
-      this.stock.dividends = data;
-      this.stock.dividends = this.stock.dividends.results;
-    });
-    this.stockapi.getTickerSplits(stock).subscribe((data) => {
-      this.stock.splits = data;
-      this.stock.splits = this.stock.splits.results;
-    });
-    this.stockapi.getTickerFinancials(stock).subscribe((data) => {
-      this.stock.financials = data;
-      this.stock.financials = this.stock.financials.results;
-    });
-    this.stockapi.getTickerNews(stock).subscribe((data) => {
-      this.stock.news = data;
-      this.stock.news = this.stock.news.results;
-    });
     console.log(this.stock);
-    this.stockapi.getOverallStockData(stock).subscribe((data) => {
-      this.stock.snapshot = data;
-      this.stock.snapshot = this.stock.snapshot.ticker;
-    });
+    
+  }
+
+  getDate(timestamp:any) {
+    let date:any = new Date(timestamp).toLocaleString();
+    date = date.split(',');
+    
+    return date[0];
   }
 }
