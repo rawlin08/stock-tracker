@@ -72,12 +72,6 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
   .noresults {
     text-align: center;
   }
-  .loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 50px 0 0 0;
-  }
   `]
 })
 export class StockSearchComponent implements OnInit {
