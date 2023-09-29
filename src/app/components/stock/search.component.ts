@@ -12,7 +12,7 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
       <h2>History</h2>
       <button (click)="this.clearHistory()"><svg><use href="#trashIcon"></use></svg></button>
     </div>
-    <div *ngFor="let ticker of tickerHistory" class="card" [routerLink]="ticker.ticker">
+    <div *ngFor="let ticker of tickerHistory" class="card" [routerLink]="ticker.ticker + '/overview'">
       <p>{{ ticker.ticker }}</p>
       <p>{{ ticker.name }}</p>
     </div>
