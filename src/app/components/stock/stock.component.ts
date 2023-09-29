@@ -7,17 +7,48 @@ import { AppComponent } from 'src/app/app.component';
   selector: 'app-stock',
   template: `
   <app-price></app-price>
-  <mat-tab-group fitInkBarToContent dynamicHeight class="remove-border-bottom">
-    <mat-tab label="Overview"><app-overview></app-overview></mat-tab>
-    <mat-tab label="News"><app-news></app-news></mat-tab>
-    <mat-tab label="Company"><app-company></app-company></mat-tab>
-  </mat-tab-group>
+  <nav mat-tab-nav-bar  [tabPanel]="tabPanel">
+    <a mat-tab-link *ngFor="let link of navLinks" [routerLink]="link.link" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">{{ link.label }}</a>
+  </nav>
+  <mat-tab-nav-panel #tabPanel>
+    <router-outlet></router-outlet>
+  </mat-tab-nav-panel>
   `,
-  styles: [``]
+  styles: [`
+  a {
+    text-decoration: none;
+  }
+  `]
 })
 export class StockComponent implements OnInit, OnDestroy {
-  constructor(public stockapi: StockAPIService, public route: ActivatedRoute, public router: Router, public app: AppComponent){}
+  navLinks: any[];
+  activeLinkIndex = -1;
+  data:any;
+
+  constructor(public stockapi: StockAPIService, public route: ActivatedRoute, public router: Router, public app: AppComponent){
+    this.navLinks = [
+      {
+        label: 'Overview',
+        link: './overview',
+        index: 0
+      }, {
+        label: 'News',
+        link: './news',
+        index: 1
+      }, {
+        label: 'Company',
+        link: './company',
+        index: 2
+      }, 
+    ];
+  }
   ngOnInit() {
+    this.router.events.subscribe((res) => {
+      this.data = res;
+      console.log(this.data);
+      
+      this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
+    });
     this.route.paramMap.subscribe((params: ParamMap) => {
       let uid:any = params.get('stock');
       uid = uid.toUpperCase();
@@ -31,7 +62,7 @@ export class StockComponent implements OnInit, OnDestroy {
       
       let today = new Date().toISOString().slice(0, 10)
       console.log(today)
-      this.stockapi.getTickerLastTrade(uid, '2023-09-26').subscribe(
+      this.stockapi.getTickerLastTrade(uid, '2023-09-28').subscribe(
         res => {
           console.log(res);
           
