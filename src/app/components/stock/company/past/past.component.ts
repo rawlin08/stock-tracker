@@ -6,7 +6,7 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
 @Component({
   selector: 'app-past',
   template: `
-  <button [routerLink]="'/stock/' + this.uid">Back to Stock</button>
+  <button [routerLink]="'/stock/' + this.uid + '/company'">Back to Stock</button>
   <mat-tab-group fitInkBarToContent dynamicHeight class="remove-border-bottom">
     <mat-tab label="Dividends"><app-past-dividends></app-past-dividends></mat-tab>
     <mat-tab label="Splits"><app-past-splits></app-past-splits></mat-tab>
