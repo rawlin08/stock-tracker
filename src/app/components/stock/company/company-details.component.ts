@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { StockAPIService } from 'src/app/services/stock-api.service';
+import * as dayjs from 'dayjs';
 
 @Component({
   selector: 'app-company-details',
   template: `
   <div>
-    <button [routerLink]="'/stock/' + this.uid">Back to Stock</button>
+    <button [routerLink]="'/stock/' + this.uid + '/company'">Back to Stock</button>
     <div class="stock">
       <div *ngIf="this.stock.details.branding">
         <img *ngIf="this.stock.details.branding.icon_url" id="logo" [src]="this.stock.details.branding.icon_url + '?apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t'" [alt]="this.stock.details.ticker + ' company logo'">
@@ -26,7 +27,7 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
       </div>
       <div class="card">
         <p>List Date</p>
-        <p>{{ getDate(this.stock.details.list_date.toLocaleString().slice(0, 9)) }}</p>
+        <p>{{ getDate(this.stock.details.list_date) }}</p>
       </div>
       <div class="card">
         <p>Exchange</p>
@@ -92,9 +93,7 @@ export class CompanyDetailsComponent implements OnInit {
   }
 
   getDate(timestamp:any) {
-    let date:any = new Date(timestamp).toLocaleString();
-    date = date.split(',');
-    
-    return date[0];
+    let date = dayjs(timestamp).format('MM/DD/YYYY');
+    return date
   }
 }
