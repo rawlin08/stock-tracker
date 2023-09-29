@@ -7,6 +7,10 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
   <form>
     <input autofocus #searchForm (input)="startTypingTimer(searchForm.value)" type="search" name="search" id="search" placeholder="Search by Ticker or Name">
   </form>
+  <mat-tab-group>
+    <mat-tab label="History"></mat-tab>
+    <mat-tab label="Favorites"></mat-tab>
+  </mat-tab-group>
   <div class="history" *ngIf="this.tickerHistory != 0 && this.results.length == 0 && searchForm.value == ''">
     <div>
       <h2>History</h2>
