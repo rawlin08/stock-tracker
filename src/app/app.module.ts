@@ -24,12 +24,14 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { PriceComponent } from './components/stock/price.component';
-import { StockSearchComponent } from './components/stock/search.component';
+import { StockSearchComponent } from './components/stock/search/search.component';
 import { IncomeStatementComponent } from './components/stock/income-statement.component';
 
 // Outside Components
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { CompanyDetailsComponent } from './components/stock/company/company-details.component';
+import { HistoryComponent } from './components/stock/search/history.component';
+import { FavoritesComponent } from './components/stock/search/favorites.component';
 
 @NgModule({
     declarations: [
@@ -50,6 +52,8 @@ import { CompanyDetailsComponent } from './components/stock/company/company-deta
         CandleChartComponent,
         IncomeStatementComponent,
         CompanyDetailsComponent,
+        HistoryComponent,
+        FavoritesComponent,
     ],
     providers: [
         StockComponent
