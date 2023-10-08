@@ -132,9 +132,6 @@ export class PriceComponent implements OnInit {
   toggleFavorite() {
     if (this.app.favorites) {
       if (this.app.favorites.includes(this.stockComponent.stock.details.ticker)) { // if ticker is already in favorites
-        console.log('in favorites');
-        console.log(this.stockComponent.stock.details.ticker);
-        
         this.app.favorites = this.app.favorites.filter((ticker:any) => ticker != this.stockComponent.stock.details.ticker);
         localStorage.setItem('favorites', JSON.stringify(this.app.favorites))
       }
