@@ -11,7 +11,7 @@ import { AppComponent } from 'src/app/app.component';
         <h2>{{ stockComponent.stock.details.ticker ? stockComponent.stock.details.ticker : '--' }}</h2>
         <div>
           <button routerLink="/stock"><svg><use href="#searchIcon"></use></svg></button>
-          <button><svg><use href="#favoriteOutlineIcon"></use></svg></button>
+          <button (click)="toggleFavorite()"><svg><use attr.href="#{{ checkFavorites() ? 'favoriteFillIcon' : 'favoriteOutlineIcon' }}"></use></svg></button>
         </div>
       </div>
       <p>{{ stockComponent.stock.details.name }}</p>
@@ -119,5 +119,30 @@ export class PriceComponent implements OnInit {
       return a
     }
   }
-
+  checkFavorites():any {
+    if (this.app.favorites) {
+      if (this.app.favorites.includes(this.stockComponent.stock.details.ticker)) {
+        return true
+      }
+      else {
+        return false
+      }
+    }
+  }
+  toggleFavorite() {
+    if (this.app.favorites) {
+      if (this.app.favorites.includes(this.stockComponent.stock.details.ticker)) { // if ticker is already in favorites
+        console.log('in favorites');
+        console.log(this.stockComponent.stock.details.ticker);
+        
+        this.app.favorites = this.app.favorites.filter((ticker:any) => ticker != this.stockComponent.stock.details.ticker);
+        localStorage.setItem('favorites', JSON.stringify(this.app.favorites))
+      }
+      else { // if ticker is being added to favorites
+        this.app.favorites.push(this.stockComponent.stock.details.ticker);
+        localStorage.setItem('favorites', JSON.stringify(this.app.favorites));
+      }
+    }
+    console.log(this.app.favorites);
+  }
 }
