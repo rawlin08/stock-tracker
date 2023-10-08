@@ -16,9 +16,15 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
           <button (click)="this.clearHistory()"><svg><use href="#trashIcon"></use></svg></button>
         </div>
         <p class="noFound" *ngIf="this.tickerHistory.length == 0">No History Found</p>
-        <div *ngFor="let ticker of tickerHistory" class="card" [routerLink]="ticker.ticker + '/overview'">
-          <p>{{ ticker.ticker }}</p>
-          <p>{{ ticker.name }}</p>
+        <div *ngFor="let ticker of tickerHistory" class="card">
+          <div [routerLink]="ticker.ticker + '/overview'">
+            <img *ngIf="this.ticker.branding.icon_url" id="logo" [src]="this.ticker.branding.icon_url + '?apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t'" [alt]="ticker.ticker + ' company logo'">
+            <div>
+              <p>{{ ticker.ticker }}</p>
+              <p>{{ ticker.name }}</p>
+            </div>
+          </div>
+          <button (click)="toggleFavorite(ticker.ticker)"><svg><use attr.href="#{{ checkFavorite(ticker.ticker) ? 'favoriteFillIcon' : 'favoriteOutlineIcon' }}"></use></svg></button>
         </div>
       </div>
     </mat-tab>
@@ -30,9 +36,15 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
         </div>
         <div>
           <p class="noFound" *ngIf="this.tickerFavorites.length == 0">No Favorites Found</p>
-          <div *ngFor="let ticker of this.tickerFavorites" class="card" [routerLink]="ticker.ticker + '/overview'">
-            <p>{{ ticker.ticker }}</p>
-            <p>{{ ticker.name }}</p>
+          <div *ngFor="let ticker of this.tickerFavorites" class="card">
+            <div [routerLink]="ticker.ticker + '/overview'">
+            <img *ngIf="this.ticker.branding.icon_url" id="logo" [src]="this.ticker.branding.icon_url + '?apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t'" [alt]="ticker.ticker + ' company logo'">
+              <div>
+                <p>{{ ticker.ticker }}</p>
+                <p>{{ ticker.name }}</p>
+              </div>
+            </div>
+            <button (click)="toggleFavorite(ticker.ticker)"><svg><use attr.href="#{{ checkFavorite(ticker.ticker) ? 'favoriteFillIcon' : 'favoriteOutlineIcon' }}"></use></svg></button>
           </div>
         </div>
       </div>
@@ -54,6 +66,12 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
   </div>
   `,
   styles: [`
+  #logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #000;
+  }
   .results {
     margin: 10px 0 0 0;
   }
@@ -66,14 +84,20 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
     align-items: center;
   }
   .card {
-    display: grid;
-    gap: 2px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     border-bottom: 1px solid #000;
     padding: 10px 0;
     cursor: pointer;
   }
   .card > p:first-child {
     font-weight: 500;
+  }
+  .card > div {
+    display: flex;
+    gap: 10px;
+    width: 100%;
   }
   input {
     width: 100%;
@@ -107,18 +131,18 @@ export class StockSearchComponent implements OnInit {
   ngOnInit() {
     if (this.app.history) {
       this.app.history.forEach((ticker:any) => {
-        this.stockapi.searchSpecificTicker(ticker).subscribe((data) => {
+        this.stockapi.getTickerDetails(ticker).subscribe((data) => {
           console.log(data);
           this.n = data;
-          this.tickerHistory.push(this.n.results[0]);
+          this.tickerHistory.push(this.n.results);
         });
       });
     }
     if (this.app.favorites) {
       this.app.favorites.forEach((ticker:any) => {
-        this.stockapi.searchSpecificTicker(ticker).subscribe((data) => {
+        this.stockapi.getTickerDetails(ticker).subscribe((data) => {
           this.n2 = data;
-          this.tickerFavorites.push(this.n2.results[0]);    
+          this.tickerFavorites.push(this.n2.results);
         });
       });
     }
@@ -175,6 +199,30 @@ export class StockSearchComponent implements OnInit {
     localStorage.setItem('favorites', JSON.stringify([]));
     this.app.favorites = [];
     this.tickerFavorites = [];
+  }
+
+  checkFavorite(ticker:any):any {  
+    if (this.app.favorites) {
+      if (this.app.favorites.includes(ticker)) {
+        return true
+      }
+      else {
+        return false
+      }
+    }
+  }
+  toggleFavorite(selectedTicker:any) {
+    if (this.app.favorites) {
+      if (this.app.favorites.includes(selectedTicker)) { // if ticker is already in favorites
+        this.app.favorites = this.app.favorites.filter((ticker:any) => ticker != selectedTicker);
+        localStorage.setItem('favorites', JSON.stringify(this.app.favorites))
+      }
+      else { // if ticker is being added to favorites
+        this.app.favorites.push(selectedTicker);
+        localStorage.setItem('favorites', JSON.stringify(this.app.favorites));
+      }
+    }
+    console.log(this.app.favorites);
   }
 
   results:any = [];
