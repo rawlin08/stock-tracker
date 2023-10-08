@@ -45,7 +45,6 @@ export class StockComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.router.events.subscribe((res) => {
       this.data = res;
-      console.log(this.data);
       
       this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
     });
