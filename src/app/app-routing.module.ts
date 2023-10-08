@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { StockSearchComponent } from './components/stock/search.component';
+import { StockSearchComponent } from './components/stock/search/search.component';
 import { StockComponent } from './components/stock/stock.component';
 import { OverviewComponent } from './components/stock/overview.component';
 import { NewsComponent } from './components/stock/news.component';
