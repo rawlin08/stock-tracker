@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppComponent } from 'src/app/app.component';
 import { StockAPIService } from 'src/app/services/stock-api.service';
 
 @Component({
@@ -7,27 +8,43 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
   <form>
     <input autofocus #searchForm (input)="startTypingTimer(searchForm.value)" type="search" name="search" id="search" placeholder="Search by Ticker or Name">
   </form>
-  <mat-tab-group>
-    <mat-tab label="History"></mat-tab>
-    <mat-tab label="Favorites"></mat-tab>
+  <mat-tab-group *ngIf="this.results.length == 0 && searchForm.value == ''">
+    <mat-tab label="History">
+      <div class="history tab">
+        <div>
+          <h2>History</h2>
+          <button (click)="this.clearHistory()"><svg><use href="#trashIcon"></use></svg></button>
+        </div>
+        <p class="noFound" *ngIf="this.tickerHistory.length == 0">No History Found</p>
+        <div *ngFor="let ticker of tickerHistory" class="card" [routerLink]="ticker.ticker + '/overview'">
+          <p>{{ ticker.ticker }}</p>
+          <p>{{ ticker.name }}</p>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Favorites">
+      <div class="favorites tab">
+        <div>
+          <h2>Favorites</h2>
+          <button (click)="this.clearFavorites()"><svg><use href="#trashIcon"></use></svg></button>
+        </div>
+        <div>
+          <p class="noFound" *ngIf="this.tickerFavorites.length == 0">No Favorites Found</p>
+          <div *ngFor="let ticker of this.tickerFavorites" class="card" [routerLink]="ticker.ticker + '/overview'">
+            <p>{{ ticker.ticker }}</p>
+            <p>{{ ticker.name }}</p>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
   </mat-tab-group>
-  <div class="history" *ngIf="this.tickerHistory != 0 && this.results.length == 0 && searchForm.value == ''">
-    <div>
-      <h2>History</h2>
-      <button (click)="this.clearHistory()"><svg><use href="#trashIcon"></use></svg></button>
-    </div>
-    <div *ngFor="let ticker of tickerHistory" class="card" [routerLink]="ticker.ticker + '/overview'">
-      <p>{{ ticker.ticker }}</p>
-      <p>{{ ticker.name }}</p>
-    </div>
-  </div>
   <ng-template #loading>
     <div class="loading">
       <div class="loader"></div>
     </div>
   </ng-template>
   <div class="results" *ngIf="this.searching != true; else loading">
-    <div *ngFor="let ticker of results" class="card" [routerLink]="ticker.ticker">
+    <div *ngFor="let ticker of results" class="card" [routerLink]="ticker.ticker + '/overview'">
       <p>{{ ticker.ticker }}</p>
       <p>{{ ticker.name }}</p>
     </div>
@@ -40,10 +57,10 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
   .results {
     margin: 10px 0 0 0;
   }
-  .history {
+  .tab {
     margin: 10px 0 0 0;
   }
-  .history > div:first-child {
+  .tab > div:first-child {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -76,20 +93,35 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
   .noresults {
     text-align: center;
   }
+  .noFound {
+    text-align: center;
+    margin: 10px 0 0 0;
+  }
+  mat-tab-group {
+    margin: 10px 0 0 0;
+  }
   `]
 })
 export class StockSearchComponent implements OnInit {
-  constructor(public stockapi: StockAPIService) {}
+  constructor(public stockapi: StockAPIService, public app: AppComponent) {}
   ngOnInit() {
-    this.history = JSON.parse(localStorage.getItem('history'));
-    console.log(this.history);
-    this.history.forEach((ticker:any) => {
-      this.stockapi.searchSpecificTicker(ticker).subscribe((data) => {
-        console.log(data);
-        this.n = data;
-        this.tickerHistory.push(this.n.results[0]);
+    if (this.app.history) {
+      this.app.history.forEach((ticker:any) => {
+        this.stockapi.searchSpecificTicker(ticker).subscribe((data) => {
+          console.log(data);
+          this.n = data;
+          this.tickerHistory.push(this.n.results[0]);
+        });
       });
-    });
+    }
+    if (this.app.favorites) {
+      this.app.favorites.forEach((ticker:any) => {
+        this.stockapi.searchSpecificTicker(ticker).subscribe((data) => {
+          this.n2 = data;
+          this.tickerFavorites.push(this.n2.results[0]);    
+        });
+      });
+    }
   }
 
   typingTimer:any;
@@ -135,18 +167,22 @@ export class StockSearchComponent implements OnInit {
   }
 
   clearHistory() {
-    localStorage.removeItem('history');
     localStorage.setItem('history', JSON.stringify([]));
+    this.app.history = [];
     this.tickerHistory = [];
+  }
+  clearFavorites() {
+    localStorage.setItem('favorites', JSON.stringify([]));
+    this.app.favorites = [];
+    this.tickerFavorites = [];
   }
 
   results:any = [];
-  n:any = {}
+  n:any = {};
+  n2:any = {};
   dataCount:any = 0;
-  history:any;
   tickerHistory:any = [];
+  tickerFavorites:any = [];
 
-  search1:any = '';
-  search2:any = '';
   searching:boolean = false;
 }

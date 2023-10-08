@@ -9,12 +9,20 @@ export class AppComponent implements OnInit {
   title = 'stock-tracker';
   constructor() {}
   ngOnInit(): void {
-    let history = localStorage.getItem('history');
-    let histArray = [];
-    if (!history) {
-      localStorage.setItem('history', JSON.stringify(histArray))
+    this.history = JSON.parse(localStorage.getItem('history'));
+    this.favorites = JSON.parse(localStorage.getItem('favorites'));
+    if (!this.history) {
+      this.history = [];
+      localStorage.setItem('history', JSON.stringify(this.history));
+    }
+    if (!this.favorites) {
+      this.favorites = [];
+      localStorage.setItem('favorites', JSON.stringify(this.favorites));
     }
   }
+
+  history:any = [];
+  favorites:any = [];
 
   numToWord(input:any) {
     let num:any = Number(input);
