@@ -45,7 +45,6 @@ export class StockComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.router.events.subscribe((res) => {
       this.data = res;
-      
       this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
     });
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -54,10 +53,9 @@ export class StockComponent implements OnInit, OnDestroy {
       this.getStockInfo(uid);
 
       // ADD STOCK TO HISTORY
-      let history = JSON.parse(localStorage.getItem('history'));
-      history = history.filter((ticker:any) => ticker != uid);
-      history.push(uid);
-      localStorage.setItem('history', JSON.stringify(history));
+      this.app.history = this.app.history.filter((ticker:any) => ticker != uid);
+      this.app.history.push(uid);
+      localStorage.setItem('history', JSON.stringify(this.app.history));
       
       let today = new Date().toISOString().slice(0, 10)
       console.log(today)
