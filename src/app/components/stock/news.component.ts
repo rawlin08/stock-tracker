@@ -17,9 +17,6 @@ dayjs.extend(relativeTime);
           <img [src]="article.publisher.favicon_url" alt="">
           <p>{{ article.publisher.name }} - {{ getDate(article.published_utc) }}</p>
         </div>
-        <div class="tickers">
-          <button [routerLink]="'/stock/' + ticker" *ngFor="let ticker of article.tickers">{{ ticker }}</button>
-        </div>
       </div>
       <div class="articleImage">
         <img [src]="article.image_url" [alt]="">
