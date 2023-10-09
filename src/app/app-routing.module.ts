@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'stock', title: 'Stock Search', component: StockSearchComponent },
   { path: 'stock/:stock', component: StockComponent, children: [
     {
-      path: 'overview', // child route path
+      path: 'stats', // child route path
       component: OverviewComponent, // child route component that the router renders
     },
     {
@@ -26,7 +26,7 @@ const routes: Routes = [
   ], },
   { path: 'stock/:stock/company/past', component: PastComponent },
   { path: 'stock/:stock/company/company-details', component: CompanyDetailsComponent },
-  { path: 'stock/:stock', redirectTo: '/stock/:stock/overview' }
+  { path: 'stock/:stock', redirectTo: '/stock/:stock/stats' }
 ];
 
 @NgModule({

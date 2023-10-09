@@ -28,8 +28,8 @@ export class StockComponent implements OnInit, OnDestroy {
   constructor(public stockapi: StockAPIService, public route: ActivatedRoute, public router: Router, public app: AppComponent){
     this.navLinks = [
       {
-        label: 'Overview',
-        link: './overview',
+        label: 'Stats',
+        link: './stats',
         index: 0
       }, {
         label: 'News',
@@ -59,7 +59,7 @@ export class StockComponent implements OnInit, OnDestroy {
       
       let today = new Date().toISOString().slice(0, 10)
       console.log(today)
-      this.stockapi.getTickerLastTrade(uid, '2023-09-28').subscribe(
+      this.stockapi.getTickerLastTrade(uid, '2023-10-06').subscribe(
         res => {
           console.log(res);
           
