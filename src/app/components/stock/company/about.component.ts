@@ -4,6 +4,7 @@ import { StockComponent } from '../stock.component';
 @Component({
   selector: 'app-about',
   template: `
+  <h2>Profile</h2>
   <div class="container" routerLink="company-details">
     <div *ngIf="stockComponent.stock.details.branding">
       <img *ngIf="stockComponent.stock.details.branding.icon_url" id="logo" [src]="stockComponent.stock.details.branding.icon_url + '?apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t'" [alt]="stockComponent.stock.details.ticker + ' company logo'">
