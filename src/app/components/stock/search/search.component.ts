@@ -18,7 +18,10 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
         <p class="noFound" *ngIf="this.tickerHistory.length == 0">No History Found</p>
         <div *ngFor="let ticker of tickerHistory" class="card">
           <div [routerLink]="ticker.ticker + '/overview'">
-            <img *ngIf="this.ticker.branding.icon_url" id="logo" [src]="this.ticker.branding.icon_url + '?apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t'" [alt]="ticker.ticker + ' company logo'">
+            <div class="noBrand" *ngIf="!this.ticker.branding">
+              <p>{{ ticker.name.slice(0,1) }}</p>
+            </div>
+            <img *ngIf="this.ticker.branding" id="logo" [src]="this.ticker.branding.icon_url + '?apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t'" [alt]="ticker.ticker + ' company logo'">
             <div>
               <p>{{ ticker.ticker }}</p>
               <p>{{ ticker.name }}</p>
@@ -38,7 +41,10 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
           <p class="noFound" *ngIf="this.tickerFavorites.length == 0">No Favorites Found</p>
           <div *ngFor="let ticker of this.tickerFavorites" class="card">
             <div [routerLink]="ticker.ticker + '/overview'">
-            <img *ngIf="this.ticker.branding.icon_url" id="logo" [src]="this.ticker.branding.icon_url + '?apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t'" [alt]="ticker.ticker + ' company logo'">
+              <div class="noBrand" *ngIf="!this.ticker.branding">
+                <p>{{ ticker.name.slice(0,1) }}</p>
+              </div>
+              <img *ngIf="this.ticker.branding" id="logo" [src]="this.ticker.branding.icon_url + '?apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t'" [alt]="ticker.ticker + ' company logo'">
               <div>
                 <p>{{ ticker.ticker }}</p>
                 <p>{{ ticker.name }}</p>
@@ -56,9 +62,18 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
     </div>
   </ng-template>
   <div class="results" *ngIf="this.searching != true; else loading">
-    <div *ngFor="let ticker of results" class="card" [routerLink]="ticker.ticker + '/overview'">
-      <p>{{ ticker.ticker }}</p>
-      <p>{{ ticker.name }}</p>
+    <div *ngFor="let ticker of results" class="card">
+      <div [routerLink]="ticker.ticker + '/overview'">
+        <div class="noBrand" *ngIf="!this.ticker.branding">
+          <p>{{ ticker.name.slice(0,1) }}</p>
+        </div>
+        <img *ngIf="this.ticker.branding && this.ticker.branding.icon_url" id="logo" [src]="this.ticker.branding.icon_url + '?apiKey=TKVSXdx635Dera7_JxMwbX3fQBc1Q77t'" [alt]="ticker.ticker + ' company logo'">
+        <div>
+          <p>{{ ticker.ticker }}</p>
+          <p>{{ ticker.name }}</p>
+        </div>
+      </div>
+      <button (click)="toggleFavorite(ticker.ticker)"><svg><use attr.href="#{{ checkFavorite(ticker.ticker) ? 'favoriteFillIcon' : 'favoriteOutlineIcon' }}"></use></svg></button>
     </div>
   </div>
   <div class="noresults" *ngIf="this.results.length == 0 && searchForm.value != '' && this.searching == false && this.typingTimer == undefined">
@@ -66,6 +81,18 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
   </div>
   `,
   styles: [`
+  .noBrand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #000;
+  }
+  .noBrand > p {
+    font-size: 20px;
+  }
   #logo {
     width: 40px;
     height: 40px;
@@ -98,6 +125,7 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
     display: flex;
     gap: 10px;
     width: 100%;
+    align-items: center;
   }
   input {
     width: 100%;
@@ -159,34 +187,84 @@ export class StockSearchComponent implements OnInit {
     },this.doneTypingInterval);
   }
   search(ticker: any) {
-    if (ticker == '') {
-      this.results = [];
-      this.n = {};
-    }
-    else {
+    this.results = [];
+    this.n = {};
+    if (ticker != '') {
       this.searching = true;
-      this.stockapi.searchSpecificTicker(ticker).subscribe((data) => {
-        
-        this.results = data;
-        this.results = this.results.results;
-        console.log(this.results);
-        this.stockapi.searchNameTicker(ticker).subscribe((data) => {
-          this.searching = false;
-          console.log(data);
-          this.n = data;
-          this.n = this.n.results;
-          this.n.forEach((element:any) => {
-            if (this.results[0]) {
-              if (element.ticker != this.results[0].ticker) {
-                this.results.push(element);
-              }
-            }
-            else {
-              this.results.push(element);
-            }
-          });
-        });
-      });
+      this.stockapi.getTickerDetails(ticker).subscribe(
+        res => {
+          let results:any = res;
+          this.results.push(results.results);
+          console.log(this.results);
+          this.stockapi.searchNameTicker(ticker).subscribe(
+            res => {
+              this.searching = false;
+              this.n = res;
+              this.n = this.n.results;
+              console.log(this.n);
+              this.n.forEach((element:any) => {
+                if (this.results[0]) {
+                  if (element.type != 'PFD') {
+                    if (element.ticker != this.results[0].ticker) {
+                      this.stockapi.getTickerDetails(element.ticker).subscribe((data) => {
+                        let results:any = data;
+                        this.results.push(results.results);
+                      });
+                    }
+                  }
+                }
+                else {
+                  if (element.type != 'PFD') {
+                    this.stockapi.getTickerDetails(element.ticker).subscribe((data) => {
+                      let results:any = data;
+                      this.results.push(results.results);
+                    });
+                  }
+                }
+              });
+          },
+          err => {
+            console.log('THERES AN ERROR DAWG', err);
+          }
+        );
+        },
+        err => {
+          console.log('ERROR MAN', err);
+          this.stockapi.searchNameTicker(ticker).subscribe(
+            res => {
+              this.searching = false;
+              this.n = res;
+              this.n = this.n.results;
+              console.log(this.n);
+              this.n.forEach((element:any) => {
+                if (this.results[0]) {
+                  if (element.type != 'PFD') {
+                    if (element.ticker != this.results[0].ticker) {
+                      this.stockapi.getTickerDetails(element.ticker).subscribe((data) => {
+                        let results:any = data;
+                        this.results.push(results.results);
+                      });
+                    }
+                  }
+                }
+                else {
+                  if (element.type != 'PFD') {
+                    this.stockapi.getTickerDetails(element.ticker).subscribe((data) => {
+                      let results:any = data;
+                      this.results.push(results.results);
+                    });
+                  }
+                }
+              });
+              console.log(this.results);
+              
+          },
+          err => {
+            console.log('THERES AN ERROR DAWG', err);
+          }
+        );
+        }
+      );
     }
   }
 
@@ -215,10 +293,15 @@ export class StockSearchComponent implements OnInit {
     if (this.app.favorites) {
       if (this.app.favorites.includes(selectedTicker)) { // if ticker is already in favorites
         this.app.favorites = this.app.favorites.filter((ticker:any) => ticker != selectedTicker);
-        localStorage.setItem('favorites', JSON.stringify(this.app.favorites))
+        this.tickerFavorites = this.tickerFavorites.filter((stock:any) => stock.ticker != selectedTicker);
+        localStorage.setItem('favorites', JSON.stringify(this.app.favorites));
       }
       else { // if ticker is being added to favorites
         this.app.favorites.push(selectedTicker);
+        this.stockapi.getTickerDetails(selectedTicker).subscribe((data) => {
+          this.n2 = data;
+          this.tickerFavorites.push(this.n2.results);
+        });
         localStorage.setItem('favorites', JSON.stringify(this.app.favorites));
       }
     }
