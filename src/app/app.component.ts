@@ -85,4 +85,11 @@ export class AppComponent implements OnInit {
     date.yesterday = new Date(yesterday).toLocaleString().slice(0, 9)
     return date
   }
+
+  setPictureForNoBrand() {
+    let colors = ['#966c63', '#f09c8a', '#85f3c6'];
+    const random = Math.floor(Math.random() * colors.length);
+    console.log(random, colors[random]);
+    return colors[random]
+  }
 }
