@@ -24,7 +24,7 @@ import { StockComponent } from '../stock.component';
     </div>
     <div>
       <h3>To Get $100/month from {{ stockComponent.stock.details.ticker }}</h3>
-      <p>Based on the current price and the most recent dividend, you would need {{ getDivFromMR().money }} invested or about {{ getDivFromMR().shares }} shares</p>
+      <p>Based on the current price and the most recent dividend, you would need <b>{{ neededShares }}</b> shares or about <b>{{ this.neededShares * this.stockComponent.price | currency }}</b> invested.</p>
     </div>
   </div>
 
@@ -41,7 +41,11 @@ import { StockComponent } from '../stock.component';
 })
 export class MRDividendComponent implements OnInit {
   constructor(public stockComponent: StockComponent) {}
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.neededShares = Math.ceil(100 / this.stockComponent.stock.dividends[0].cash_amount);    
+  }
+
+  neededShares = 0;
 
   getFrequency(frequency:any) {
     let freq;
@@ -66,23 +70,6 @@ export class MRDividendComponent implements OnInit {
     dy = dy * 100;
     dy = dy.toFixed(2)
     return dy
-  }
-  
-  getDivFromMR() {
-    let needed = {
-      money: 0,
-      shares: 0
-    }
-
-    return needed
-  }
-  getDivFromSmallest() {
-    let needed = {
-      money: 0,
-      shares: 0
-    }
-
-    return needed
   }
 
   round(num: any) {
