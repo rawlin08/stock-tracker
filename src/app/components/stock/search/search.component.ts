@@ -6,6 +6,7 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
   selector: 'app-stocksearch',
   template: `
   <form>
+    <label for="search"><svg class="searchIcon"><use href="#searchIcon"></use></svg></label>
     <input autofocus #searchForm (input)="startTypingTimer(searchForm.value)" type="search" name="search" id="search" placeholder="Search by Ticker or Name">
   </form>
   <mat-tab-group *ngIf="this.results.length == 0 && searchForm.value == ''">
@@ -81,6 +82,9 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
   </div>
   `,
   styles: [`
+  .mdc-tab__text-label {
+    color: var(--textColor);
+  }
   .noBrand {
     display: flex;
     align-items: center;
@@ -114,7 +118,7 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid var(--headerBackgroundColor);
     padding: 10px 0;
     cursor: pointer;
   }
@@ -129,10 +133,29 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
   }
   input {
     width: 100%;
-    padding: 5px;
+    padding: 10px 5px;
     border-radius: 6px;
-    border: 1px solid #000;
+    border: none;
     font-size: 16px;
+    background-color: var(--headerBackgroundColor);
+    color: var(--textColor);
+  }
+  input:focus {
+    outline: none;
+  }
+  form {
+    display: flex;
+    align-items: center;
+    box-shadow: 0 0 5px 4px #0000001a;
+    background-color: var(--headerBackgroundColor);
+    border-radius: 6px;
+  }
+  form > label {
+    display: flex;
+    align-items: center;
+  }
+  .searchIcon {
+    padding: 0 0 0 5px;
   }
   button {
     background-color: transparent;
