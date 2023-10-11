@@ -1,46 +1,50 @@
 :root {
-    --card-width: 320px;
-}
-.light {
-    --headerBackgroundColor: #FFF;
-    --mainBackgroundColor: #E2E8F0;
-    --iconColor: #000;
-}
-.dark {
     --headerBackgroundColor: #2B3743;
     --mainBackgroundColor: #212C36;
-    --iconColor: #FFF;
+    --textColor: #FFF;
 }
 html {
     font-family: 'Nunito Sans', sans-serif;
+    letter-spacing: 0.5px;
 }
 body {
     margin: 0;
     padding: 10px;
     min-height: 100%;
-    color: var(--iconColor);
+    color: var(--textColor);
     background-color: var(--mainBackgroundColor);
-    transition: background 200ms ease-in-out, color 300ms ease-in-out;
 }
 button {
     cursor: pointer;
+    color: var(--textColor);
 }
 h1, h2, h3, h4, p {
     margin: 0;
 }
-.icon {
-    color: var(--iconColor);
-    width: 25px;
-    height: 25px;
+.arrowIcon {
+    width: 30px;
+    height: 30px;
+}
+.heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 10px 0;
+}
+.container {
+    background-color: var(--headerBackgroundColor);
+    border-radius: 8px;
+    box-shadow: 0 0 5px 4px #0000001a;
+    padding: 10px;
 }
 
 /* COMPONENTS */
 
-app-stock, app-overview, app-mrdividend, app-splits, app-financials {
+app-stock, app-overview, app-mrdividend, app-splits, app-financials, app-about {
     display: block;
 }
-app-mrdividend, app-financials, app-splits, app-financials {
-    padding: 20px 0;
+app-mrdividend, app-financials, app-splits, app-about {
+    padding: 10px 0;
 }
 app-overview {
     display: grid;
@@ -53,6 +57,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .dataNotFound {
     text-align: center;
     margin: 20px 0 0 0;
+}
+
+input {
+    font-family: inherit;
+    letter-spacing: inherit;
+    font-size: 16px;
+    font-weight: 300;
 }
 
 /* LOADER */
@@ -78,4 +89,4 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     justify-content: center;
     align-items: center;
     margin: 50px 0 0 0;
-  }
+}
