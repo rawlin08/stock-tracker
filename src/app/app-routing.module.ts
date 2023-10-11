@@ -7,6 +7,8 @@ import { NewsComponent } from './components/stock/news.component';
 import { CompanyComponent } from './components/stock/company/company.component';
 import { PastComponent } from './components/stock/company/past/past.component';
 import { CompanyDetailsComponent } from './components/stock/company/company-details.component';
+import { PastDividendsComponent } from './components/stock/company/past/past-dividends.component';
+import { PastSplitsComponent } from './components/stock/company/past/past-splits.component';
 
 const routes: Routes = [
   { path: 'stock', title: 'Stock Search', component: StockSearchComponent },
@@ -24,7 +26,16 @@ const routes: Routes = [
       component: CompanyComponent, // child route component that the router renders
     }
   ], },
-  { path: 'stock/:stock/company/past', component: PastComponent },
+  { path: 'stock/:stock/company/past', component: PastComponent, children: [
+    {
+      path: 'dividends',
+      component: PastDividendsComponent,
+    },
+    {
+      path: 'splits',
+      component: PastSplitsComponent,
+    }
+  ]},
   { path: 'stock/:stock/company/company-details', component: CompanyDetailsComponent },
   { path: 'stock/:stock', redirectTo: '/stock/:stock/stats' }
 ];
