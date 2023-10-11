@@ -7,15 +7,33 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
   selector: 'app-past',
   template: `
   <button [routerLink]="'/stock/' + this.uid + '/company'">Back to Stock</button>
-  <mat-tab-group fitInkBarToContent dynamicHeight class="remove-border-bottom">
-    <mat-tab label="Dividends"><app-past-dividends></app-past-dividends></mat-tab>
-    <mat-tab label="Splits"><app-past-splits></app-past-splits></mat-tab>
-  </mat-tab-group>
+  <nav mat-tab-nav-bar  [tabPanel]="tabPanel">
+    <a mat-tab-link *ngFor="let link of navLinks" [routerLink]="link.link" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">{{ link.label }}</a>
+  </nav>
+  <mat-tab-nav-panel #tabPanel>
+    <router-outlet></router-outlet>
+  </mat-tab-nav-panel>
   `,
-  styles: [``]
+  styles: [`
+  a {
+    text-decoration: none;
+  }
+  `]
 })
 export class PastComponent implements OnInit {
-  constructor(public stockComponent: StockComponent, public route: ActivatedRoute, public router: Router, public stockapi: StockAPIService) {}
+  constructor(public stockComponent: StockComponent, public route: ActivatedRoute, public router: Router, public stockapi: StockAPIService) {
+    this.navLinks = [
+      {
+        label: 'Dividends',
+        link: './dividends',
+        index: 0
+      }, {
+        label: 'Splits',
+        link: './splits',
+        index: 1
+      } 
+    ];
+  }
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.uid = params.get('stock');
@@ -23,6 +41,9 @@ export class PastComponent implements OnInit {
       this.getStockInfo(this.uid);
     });
   }
+
+  navLinks: any[];
+  activeLinkIndex = -1;
 
   stock:any = {
     dividends: [],
