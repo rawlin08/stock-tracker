@@ -98,7 +98,7 @@ import { AppComponent } from 'src/app/app.component';
   }
   .income, .balance, .cash {
     padding: 20px 0;
-    border-top: 1px solid #000;
+    border-top: 2px solid var(--mainBackgroundColor);
   }
   .data > div:first-child, .card {
     /* container surrounding the table */
