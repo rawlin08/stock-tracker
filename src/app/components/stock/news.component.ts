@@ -50,10 +50,11 @@ dayjs.extend(relativeTime);
   }
   p:last-child {
     font-size: 0.75em;
-    color: gray;
+    color: var(--textColor);
+    opacity: 0.7;
   }
   h4 {
-    font-size: 15px;
+    font-size: 16px;
     line-height: 22px;
     overflow: hidden;
     text-overflow: ellipsis;
