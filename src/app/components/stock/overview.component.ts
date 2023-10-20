@@ -36,10 +36,6 @@ import { AppComponent } from 'src/app/app.component';
         </div>
       </div>
       <div class="col">
-        <div *ngIf="stockComponent.stock.details.market_cap">
-          <h4>Market Cap</h4>
-          <p>{{ app.numToWord(stockComponent.stock.details.market_cap) }}</p>
-        </div>
         <div>
           <h4>52 Week High</h4>
           <p>253.92</p>
@@ -47,6 +43,10 @@ import { AppComponent } from 'src/app/app.component';
         <div>
           <h4>52 Week Low</h4>
           <p>101.53</p>
+        </div>
+        <div>
+          <h4>Market Cap</h4>
+          <p>{{ stockComponent.stock.details.market_cap ? app.numToWord(stockComponent.stock.details.market_cap) : '-' }}</p>
         </div>
       </div>
     </div>
