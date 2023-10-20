@@ -20,7 +20,7 @@ import { AppComponent } from 'src/app/app.component';
   <div class="price container">
     <div class="currentPrice">
       <h1>{{ stockComponent.price != undefined ? stockComponent.price : '--' }}</h1> 
-      <p *ngIf="stockComponent.price && stockComponent.stock.snapshot.prevDay"><svg class="upDownArrow"><use [attr.href]="stockComponent.price > stockComponent.stock.snapshot.prevDay.c ? '#arrowUpIcon' : '#arrowDownIcon'"></use></svg> {{ stockComponent.price > stockComponent.stock.snapshot.prevDay.c ? '+' : '' }}{{ round(stockComponent.price - stockComponent.stock.snapshot.prevDay.c) }} ({{ stockComponent.price > stockComponent.stock.snapshot.prevDay.c ? '+' : '-' }}{{ getPriceChange(stockComponent.stock.snapshot.prevDay.c, stockComponent.price) }}%)</p>
+      <p [style.color]="stockComponent.price > stockComponent.stock.snapshot.prevDay.c ? '#03AB2C' : '#DD284C'" *ngIf="stockComponent.price && stockComponent.stock.snapshot.prevDay"><svg class="upDownArrow"><use [attr.href]="stockComponent.price > stockComponent.stock.snapshot.prevDay.c ? '#arrowUpIcon' : '#arrowDownIcon'"></use></svg> {{ stockComponent.price > stockComponent.stock.snapshot.prevDay.c ? '+' : '' }}{{ round(stockComponent.price - stockComponent.stock.snapshot.prevDay.c) }} ({{ stockComponent.price > stockComponent.stock.snapshot.prevDay.c ? '+' : '-' }}{{ getPriceChange(stockComponent.stock.snapshot.prevDay.c, stockComponent.price) }}%)</p>
     </div>
     <div class="hlv" *ngIf="stockComponent.stock.details.market_cap && stockComponent.stock.snapshot.day">
       <div>
