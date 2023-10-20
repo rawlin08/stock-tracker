@@ -89,8 +89,8 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 46px;
-    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
     border-radius: 50%;
     border: 1px solid #000;
   }
@@ -108,6 +108,7 @@ import { StockAPIService } from 'src/app/services/stock-api.service';
   }
   .tab {
     margin: 10px 0 0 0;
+    min-height: 90vh;
   }
   .tab > div:first-child {
     display: flex;
